@@ -56,3 +56,25 @@ from customer c
 left join "transaction" t 
 on c.customer_id = t.customer_id
 where t.customer_id is null;
+
+
+
+/* Вывести всех клиентов из IT, у которых транзакции с максимальной стандартной стоимостью. */
+
+select distinct t.customer_id 
+from "transaction" t 
+join customer c 
+on t.customer_id = c.customer_id and c.job_industry_category = 'IT'
+where t.standard_cost in (select max(standard_cost) from "transaction");
+
+
+
+/* Вывести всех клиентов из сферы IT и Health, у которых есть подтвержденные транзакции за период '2017-07-07' по '2017-07-17'. */
+
+select distinct t.customer_id 
+from "transaction" t 
+join customer c 
+on t.customer_id = c.customer_id and c.job_industry_category in ('IT', 'Health')
+where 1=1
+and t.order_status = 'Approved'
+and to_date(transaction_date, 'DD.MM.YYYY') between '2017-07-07' and '2017-07-17';
